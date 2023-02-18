@@ -35,7 +35,7 @@ class Counter: ObservableObject {
             let currentDate = calendar.date(from: components)
             
             var eventDateComponents = DateComponents()
-            eventDateComponents.year = 2024
+            eventDateComponents.year = 2025
             eventDateComponents.month = 12
             eventDateComponents.day = 31
             eventDateComponents.hour = 23
