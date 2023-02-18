@@ -16,6 +16,8 @@ class Counter: ObservableObject {
     @Published var minutes = 0
     @Published var secounds = 0
     
+    var selectedDate = Date()
+    
     init() {
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats:true)
         
@@ -34,13 +36,22 @@ class Counter: ObservableObject {
             
             let currentDate = calendar.date(from: components)
             
+            let selectedComponents = calendar.dateComponents([
+                .year
+                , .month
+                , .day
+                , .hour
+                , .minute
+                , .second
+            ], from: self.selectedDate)
+            
             var eventDateComponents = DateComponents()
-            eventDateComponents.year = 2025
-            eventDateComponents.month = 12
-            eventDateComponents.day = 31
-            eventDateComponents.hour = 23
-            eventDateComponents.minute = 59
-            eventDateComponents.second = 59
+            eventDateComponents.year = selectedComponents.year
+            eventDateComponents.month = selectedComponents.month
+            eventDateComponents.day = selectedComponents.day
+            eventDateComponents.hour = selectedComponents.hour
+            eventDateComponents.minute = selectedComponents.minute
+            eventDateComponents.second = selectedComponents.second
             
             let eventDate = calendar.date(from: eventDateComponents)
             
@@ -53,12 +64,18 @@ class Counter: ObservableObject {
                 , .second
             ], from: currentDate!, to: eventDate!)
             
-            self.years = timeLeft.year ?? 0000
-            self.months = timeLeft.month ?? 00
-            self.days = timeLeft.day ?? 00
-            self.hours = timeLeft.hour ?? 00
-            self.minutes = timeLeft.minute ?? 00
-            self.secounds = timeLeft.second ?? 00            
+            if (timeLeft.second! >= 0) {
+                if (timeLeft.minute! >= 0) {
+                    if (timeLeft.hour! >= 0) {
+                        self.years = timeLeft.year ?? 0000
+                        self.months = timeLeft.month ?? 00
+                        self.days = timeLeft.day ?? 00
+                        self.hours = timeLeft.hour ?? 00
+                        self.minutes = timeLeft.minute ?? 00
+                        self.secounds = timeLeft.second ?? 00
+                    }
+                }                
+            }
         }
     }
 }
@@ -70,19 +87,27 @@ struct ContentView: View {
     var body: some View {
         
         VStack{
+            DatePicker(selection: $counter.selectedDate, in: Date()...,
+                       displayedComponents: [.hourAndMinute, .date]){
+                Text("Selecione uma Data: ")
+            }
             
             HStack{
                 Text("\(counter.years) anos")
                 Text("\(counter.months) meses")
                 Text("\(counter.days) dias")
             }
+            .padding()
             
             HStack{
                 Text("\(counter.hours) horas")
                 Text("\(counter.minutes) minutos")
                 Text("\(counter.secounds) segundos")
             }
+            .padding()
+            
         }
+        .padding()
     }
 }
 
