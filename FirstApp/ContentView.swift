@@ -17,8 +17,7 @@ class Counter: ObservableObject {
     @Published var secounds = 0
     
     init() {
-        Timer.scheduledTimer(withTimeInterval: 1.0,
-                             repeats:true)
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats:true)
         
         { timer in
             
